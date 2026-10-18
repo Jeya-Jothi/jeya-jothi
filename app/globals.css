@@ -1,1 +1,219 @@
 @import "tailwindcss";
+
+/* ===============================================================
+   Design tokens
+   Palette: white + Pantone 20-0076 TPM "Sceptre Red" (#840016)
+   Single light theme, no dark mode.
+   =============================================================== */
+@theme inline {
+  /* Fonts (variables come from next/font in layout.tsx) */
+  --font-sans: var(--font-oxygen), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* Sceptre Red scale: 600 is the Pantone base */
+  --color-sceptre-50: #fdf3f4;
+  --color-sceptre-100: #fae4e7;
+  --color-sceptre-200: #f3c4ca;
+  --color-sceptre-300: #e699a3;
+  --color-sceptre-400: #cf5f6e;
+  --color-sceptre-500: #ae2f42;
+  --color-sceptre-600: #840016;
+  --color-sceptre-700: #6b0012;
+  --color-sceptre-800: #52000e;
+  --color-sceptre-900: #3a000a;
+  --color-sceptre-950: #1c0005;
+
+  /* Semantic colours */
+  --color-brand: var(--color-sceptre-800);
+  --color-ink: var(--color-sceptre-950); /* body text */
+  --color-muted: var(--color-sceptre-700);
+  --color-line: var(--color-sceptre-100); /* tile borders */
+
+  /* Bento shape + depth */
+  --radius-tile: 1.75rem;
+  --shadow-tile:
+    0 1px 0 0 rgb(132 0 22 / 0.04), 0 12px 32px -16px rgb(132 0 22 / 0.18);
+  --shadow-tile-hover:
+    0 1px 0 0 rgb(132 0 22 / 0.06), 0 24px 48px -20px rgb(132 0 22 / 0.3);
+
+  /* Fluid display type for the maximalist moments */
+  --text-display: clamp(3rem, 9vw, 8rem);
+  --text-display--line-height: 0.95;
+  --text-display--letter-spacing: -0.04em;
+}
+
+/* ===============================================================
+   Base
+   =============================================================== */
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    background: var(--color-sceptre-950);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-sceptre-600);
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-sceptre-600);
+    outline-offset: 3px;
+    border-radius: 0.5rem;
+  }
+
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Slim, on-brand scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-sceptre-300) transparent;
+  }
+}
+
+/* ===============================================================
+   Reusable bento building blocks
+   Usage: <div className="bento-tile bento-tile--red">…</div>
+   =============================================================== */
+@layer components {
+  .bento-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  @media (min-width: 640px) {
+    .bento-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .bento-grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+  }
+
+  .bento-tile {
+    position: relative;
+    overflow: hidden;
+    padding: 1.5rem;
+    border-radius: var(--radius-tile);
+    border: 1px solid var(--color-line);
+    background: #ffffff;
+    color: var(--color-ink);
+    box-shadow: var(--shadow-tile);
+    transition:
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .bento-tile:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-tile-hover);
+  }
+
+  /* Variants */
+  .bento-tile--tint {
+    background: var(--color-sceptre-50);
+  }
+
+  .bento-tile--red {
+    background: var(--color-sceptre-600);
+    border-color: var(--color-sceptre-600);
+    color: #ffffff;
+  }
+
+  /* Small uppercase label used on tiles and chips */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-sceptre-600);
+  }
+
+  .bento-tile--red .eyebrow {
+    color: var(--color-sceptre-200);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    border: 1px solid var(--color-sceptre-200);
+    background: #ffffff;
+    font-size: 0.875rem;
+    color: var(--color-sceptre-700);
+  }
+}
+
+/* Page container: consistent gutters on every section */
+@utility container-page {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+
+  @media (min-width: 640px) {
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding-inline: 2rem;
+  }
+}
+
+/* ===============================================================
+   Accessibility: respect reduced-motion preferences
+   =============================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

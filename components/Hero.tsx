@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { motion, MotionConfig, useScroll, useTransform } from "motion/react";
+import { useRevealProgress } from "@/components/HeroReveal";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -226,19 +227,11 @@ function Marquee() {
 /* ---------- Hero ---------- */
 
 export default function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  // Gentle scroll parallax: giant word drifts down, role slides away
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const giantY = useTransform(scrollYProgress, [0, 1], [0, 90]);
-  const roleX = useTransform(scrollYProgress, [0, 1], [0, 160]);
-
+  const wipe = useRevealProgress();
+  const contentScale = useTransform(wipe, [0, 1], [1, 0.95]);
   return (
     <MotionConfig reducedMotion="user">
-      <section ref={sectionRef} id="home" className="h-svh">
+      <section id="home" className="h-svh">
         <motion.div
           initial={{ opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -246,21 +239,23 @@ export default function Hero() {
           className="relative h-full overflow-hidden bg-white"
         >
           {/* Main content: centered in the full screen height */}
-          <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-10 lg:px-14">
+          <motion.div
+            style={{ scale: contentScale }}
+            className="absolute inset-0 flex flex-col justify-center px-6 sm:px-10 lg:px-14"
+          >
+            {" "}
             {/* Real heading for screen readers and SEO */}
             <h1 className="sr-only">
               Jeya Jothi, Frontend Developer Portfolio
             </h1>
-
             {/* 1. Name, small */}
             <div aria-hidden="true" className=" ml-2">
               <p className="text-[clamp(1.1rem,2.4vw,2.25rem)] leading-tight text-ink">
                 <Line text="Jeya Jothi" delay={0.2} />
               </p>
             </div>
-
             {/* 2. PORTFOLIO, giant, bold, full width */}
-            <motion.div aria-hidden="true" style={{ y: giantY }}>
+            <motion.div aria-hidden="true">
               {/* Desktop and tablet: one line */}
               <div className="hidden md:block">
                 <FitLine text="PORTFOLIO" delay={0.35} fallback="16vw" />
@@ -271,18 +266,16 @@ export default function Hero() {
                 <FitLine text="FOLIO" delay={0.6} fallback="24vw" />
               </div>
             </motion.div>
-
             {/* 3. Role, right end */}
             <motion.div
               aria-hidden="true"
-              style={{ x: roleX }}
               className="mt-4 flex items-center justify-end gap-4 sm:mt-6 sm:gap-6"
             >
               <p className="text-[clamp(1.1rem,2.4vw,2.25rem)] leading-tight text-ink">
                 <Line text="Frontend Developer" delay={1.05} />
               </p>
             </motion.div>
-          </div>
+          </motion.div>
 
           {/* Marquee pinned to the bottom edge */}
           <div className="absolute inset-x-0 bottom-0">

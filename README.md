@@ -29,4 +29,4 @@ I turn ideas into thoughtful, interactive web experiences with clean layouts, sm
 
 ## 📫 Say hello
 
-[Portfolio](https://YOUR-DOMAIN) · [LinkedIn](https://www.linkedin.com/in/YOUR_LINKEDIN) · [jeyajothi108@gmail.com](mailto:jeyajothi108@gmail.com)
+[Portfolio](https://jeya-jothi-portfolio.onrender.com) · [LinkedIn](https://jeya-jothi-portfolio.onrender.com) · [jeyajothi108@gmail.com](mailto:jeyajothi108@gmail.com)

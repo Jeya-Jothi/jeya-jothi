@@ -101,7 +101,7 @@ I'm always happy to connect with fellow developers, exchange ideas and explore i
 </p>
 
 <p align="center">
-  <i>Still learning. Still building. 🚀</i>
+  <i>Still learning. Still building.</i>
 </p>
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:141E30,100:243B55&height=100&section=footer" width="100%" />

@@ -1,32 +1,86 @@
-# Hey, I'm Jothi 👋
+<!-- Header -->
+<div align="center">
 
-**Frontend Developer** who likes to design, not AI slop.
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:141E30,100:243B55&height=180&section=header&text=Hey,%20I'm%20Jothi!&fontSize=42&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Frontend%20Developer%20%7C%20UI%20Enthusiast&descAlignY=58&descSize=16" width="100%" />
 
-I turn ideas into thoughtful, interactive web experiences with clean layouts, smooth interactions and a bit of curiosity. I studied electronics engineering, then found my favorite circuit board: the browser.
+</div>
 
-## 🛠 What I work with
+<h3 align="center">Frontend Developer who likes to design, not AI slop.</h3>
 
-![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
-![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=nextdotjs&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white)
-![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white)
-![Figma](https://img.shields.io/badge/Figma-F24E1E?style=flat&logo=figma&logoColor=white)
+<p align="center">
+  <a href="https://jeya-jothi-portfolio.onrender.com">Portfolio</a> •
+  <a href="https://www.linkedin.com/in/jeya-jothi-841277211">LinkedIn</a> •
+  <a href="mailto:jeyajothi108@gmail.com">Email</a>
+</p>
 
-## 🚀 Things I've built
+---
 
-- **[Play NFT](https://github.com/Jeya-Jothi/Play-NFT)**: NFT marketplace UI with smooth interactions
-- **[Healthcare Dashboard](https://github.com/Jeya-Jothi/Healthcare-dashboard-React)**: clean, component-based admin dashboard in React
-- **[GTG Perfume](https://github.com/Jeya-Jothi/GTG_Perfume_Project)**: responsive product page with an interactive gallery
-- **[Pokemon Explorer](https://github.com/Jeya-Jothi/Pokemon-Explorer)** and **[QR Code Generator](https://github.com/Jeya-Jothi/QR-Code-Generator)**: small projects, built to learn
+### A little about me
 
-## 💼 Right now
+I'm Jothi, a frontend developer from Tamil Nadu, India.
 
-- Building dashboards at **Growify India** as a Frontend Developer
-- Still learning. Always building.
+I enjoy turning ideas into clean, interactive web experiences. I care about how things look, how they feel, and how they work.
 
-## 📫 Say hello
+I started with electronics engineering and somehow ended up spending most of my time making things work in a browser. No regrets!
 
-[Portfolio](https://jeya-jothi-portfolio.onrender.com) · [LinkedIn](https://www.linkedin.com/in/jeya-jothi-841277211) · [jeyajothi108@gmail.com](mailto:jeyajothi108@gmail.com)
+- 💻 Working with React and Next.js.
+- 🎨 Interested in UI design, interactions and visual details.
+- 🧩 Enjoy building things from scratch and figuring out how they work.
+- 🌱 Always learning something new.
+
+### My tech stack
+
+<p align="left">
+  <img src="https://skillicons.dev/icons?i=react,nextjs,ts,js,html,css,tailwind,nodejs,express,git,github,figma&perline=6" />
+</p>
+
+### Things I've built
+
+A few projects I've enjoyed working on:
+
+| Project                                                                          | What it is                                  |
+| -------------------------------------------------------------------------------- | ------------------------------------------- |
+| [Play NFT](https://github.com/Jeya-Jothi/Play-NFT)                               | NFT marketplace UI with smooth interactions |
+| [Healthcare Dashboard](https://github.com/Jeya-Jothi/Healthcare-dashboard-React) | Component-based admin dashboard in React    |
+| [GTG Perfume](https://github.com/Jeya-Jothi/GTG_Perfume_Project)                 | Product website with an interactive gallery |
+| [Pokemon Explorer](https://github.com/Jeya-Jothi/Pokemon-Explorer)               | A small Pokémon exploration project         |
+| [QR Code Generator](https://github.com/Jeya-Jothi/QR-Code-Generator)             | Simple QR code generation tool              |
+
+### GitHub at a glance
+
+<p align="center">
+  <img height="165" src="https://github-readme-stats.vercel.app/api?username=Jeya-Jothi&show_icons=true&theme=github_dark&hide_border=true&rank_icon=github" />
+  <img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Jeya-Jothi&layout=compact&theme=github_dark&hide_border=true" />
+</p>
+
+<p align="center">
+  <img src="https://streak-stats.demolab.com?user=Jeya-Jothi&theme=github-dark-blue&hide_border=true" width="70%" />
+</p>
+
+### Where I've worked
+
+**Growify India** — Frontend Developer
+
+Worked on business websites and SaaS products, building responsive interfaces and translating design ideas into functional web experiences.
+
+### Let's connect
+
+I'm always happy to connect with fellow developers, exchange ideas and explore interesting opportunities.
+
+<p align="left">
+  <a href="https://jeya-jothi-portfolio.onrender.com">
+    <img src="https://img.shields.io/badge/Portfolio-Visit-222222?style=for-the-badge&logo=vercel&logoColor=white" />
+  </a>
+  <a href="https://www.linkedin.com/in/jeya-jothi-841277211">
+    <img src="https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" />
+  </a>
+  <a href="mailto:jeyajothi108@gmail.com">
+    <img src="https://img.shields.io/badge/Email-Say_Hello-EA4335?style=for-the-badge&logo=gmail&logoColor=white" />
+  </a>
+</p>
+
+<p align="center">
+  <i>Still learning. Still building. 🚀</i>
+</p>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:141E30,100:243B55&height=100&section=footer" width="100%" />

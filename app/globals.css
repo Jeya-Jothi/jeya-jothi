@@ -47,11 +47,10 @@
    =============================================================== */
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
   }
-
   html {
-    background: var(--color-sceptre-950);
+    background: #ffffff;
   }
 
   body {

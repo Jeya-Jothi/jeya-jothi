@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, MotionConfig, useScroll, useTransform } from "motion/react";
+import { motion, MotionConfig, useTransform } from "motion/react";
 import { useRevealProgress } from "@/components/HeroReveal";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -97,11 +97,6 @@ function measureInk(text: string, el: HTMLElement) {
   };
 }
 
-/**
- * Bold giant text. The visible INK (not the text box) is stretched to the
- * exact width of its container, so the first and last letters touch both
- * edges and line up with everything else in the column.
- */
 function FitLine({
   text,
   delay = 0,

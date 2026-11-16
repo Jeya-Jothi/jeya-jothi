@@ -75,12 +75,6 @@ A mix of professional work and personal projects I've built.
 </p>
 
 <p align="center">
-  <a href="https://github.com/Jeya-Jothi">
-    View my GitHub profile and contribution activity →
-  </a>
-</p>
-
-<p align="center">
   <img src="https://streak-stats.demolab.com?user=Jeya-Jothi&theme=github-dark-blue&hide_border=true" width="70%" />
 </p>
 

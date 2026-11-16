@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, MotionConfig, useTransform } from "motion/react";
+import {
+  motion,
+  MotionConfig,
+  useReducedMotion,
+  useTransform,
+} from "motion/react";
 import { useRevealProgress } from "@/components/HeroReveal";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -97,6 +102,11 @@ function measureInk(text: string, el: HTMLElement) {
   };
 }
 
+/**
+ * Bold giant text. The visible INK (not the text box) is stretched to the
+ * exact width of its container, so the first and last letters touch both
+ * edges and line up with everything else in the column.
+ */
 function FitLine({
   text,
   delay = 0,
@@ -223,10 +233,15 @@ function Marquee() {
 
 export default function Hero() {
   const wipe = useRevealProgress();
-  const contentScale = useTransform(wipe, [0, 1], [1, 0.95]);
+  const reduce = useReducedMotion();
+
+  // The hero is squeezed into whatever width the shutter leaves free.
+  // Anchored to the right edge, so its left side always touches the shutter.
+  // Name, PORTFOLIO and role all squeeze together, staying on their own rows.
+  const squeeze = useTransform(wipe, [0, 1], [1, reduce ? 1 : 0.02]);
   return (
     <MotionConfig reducedMotion="user">
-      <section id="home" className="h-svh">
+      <section id="home" className="h-lvh">
         <motion.div
           initial={{ opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -235,8 +250,8 @@ export default function Hero() {
         >
           {/* Main content: centered in the full screen height */}
           <motion.div
-            style={{ scale: contentScale }}
-            className="absolute inset-0 flex flex-col justify-center px-6 sm:px-10 lg:px-14"
+            style={{ scaleX: squeeze, originX: 1 }}
+            className="absolute inset-x-0 top-0 flex h-svh flex-col justify-center px-6 sm:px-10 lg:px-14"
           >
             {" "}
             {/* Real heading for screen readers and SEO */}
@@ -244,7 +259,7 @@ export default function Hero() {
               Jeya Jothi, Frontend Developer Portfolio
             </h1>
             {/* 1. Name, small */}
-            <div aria-hidden="true" className=" ml-2">
+            <div aria-hidden="true" className="ml-2">
               <p className="text-[clamp(1.1rem,2.4vw,2.25rem)] leading-tight text-ink">
                 <Line text="Jeya Jothi" delay={0.2} />
               </p>
@@ -272,10 +287,17 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Marquee pinned to the bottom edge */}
-          <div className="absolute inset-x-0 bottom-0">
-            <Marquee />
-          </div>
+          {/* Marquee sits on the fixed svh line (no JS, no resize jumps).
+              The dark area below it only becomes visible when the mobile
+              address bar hides, and the browser reveals it smoothly. */}
+          <motion.div
+            style={{ scaleX: squeeze, originX: 1 }}
+            className="absolute inset-x-0 bottom-0 top-[100svh] bg-ink"
+          >
+            <div className="absolute inset-x-0 bottom-full">
+              <Marquee />
+            </div>
+          </motion.div>
         </motion.div>
       </section>
     </MotionConfig>

@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useRef, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  type ReactNode,
+} from "react";
 import {
   motion,
   useMotionValue,
@@ -18,6 +24,23 @@ export function useRevealProgress() {
   const fallback = useMotionValue(0);
   return wipe ?? fallback;
 }
+
+/**
+ * Mobile browsers show/hide the address bar while scrolling, which changes
+ * window.innerHeight (and 100vh / 100dvh) on the fly. Anything that depends
+ * on those makes the animation jump.
+ *
+ * So this component only uses the two stable viewport units:
+ *   - svh: viewport with the address bar SHOWN  (never changes on scroll)
+ *   - lvh: viewport with the address bar HIDDEN (never changes on scroll)
+ *
+ * Layout:
+ *   stage   = 100lvh  (always fills the screen, bar shown or hidden)
+ *   wrapper = stage + 200svh  → the pinned scroll distance is exactly 200svh
+ *
+ * Progress is calculated by hand from scrollY and those fixed sizes, instead
+ * of Motion's target offsets (which read window.innerHeight).
+ */
 export default function HeroReveal({
   children,
   panel,
@@ -26,10 +49,37 @@ export default function HeroReveal({
   panel: ReactNode; // the content shown on the dark panel
 }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const metrics = useRef({ top: 0, distance: 1 });
 
-  const { scrollYProgress } = useScroll({
-    target: wrapperRef,
-    offset: ["start start", "end end"],
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    const stage = stageRef.current;
+    if (!wrapper || !stage) return;
+
+    const measure = () => {
+      metrics.current.top =
+        wrapper.getBoundingClientRect().top + window.scrollY;
+      metrics.current.distance = Math.max(
+        1,
+        wrapper.offsetHeight - stage.offsetHeight,
+      );
+    };
+
+    measure();
+    // Fires only on real size changes (rotation, desktop resize),
+    // not when the mobile address bar slides in and out.
+    const observer = new ResizeObserver(measure);
+    observer.observe(wrapper);
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, []);
+
+  const { scrollY } = useScroll();
+
+  const scrollYProgress = useTransform(scrollY, (y) => {
+    const { top, distance } = metrics.current;
+    return Math.min(1, Math.max(0, (y - top) / distance));
   });
 
   // Smooths out mouse-wheel steps so the wipe feels fluid
@@ -55,7 +105,7 @@ export default function HeroReveal({
 
   return (
     <RevealContext.Provider value={wipe}>
-      <div ref={wrapperRef} className="relative h-[300svh]">
+      <div ref={wrapperRef} className="relative h-[calc(100lvh+200svh)]">
         {/* Anchor for the "About" nav link */}
         <span
           id="about"
@@ -63,9 +113,12 @@ export default function HeroReveal({
           className="absolute left-0 top-[40%] h-px w-px"
         />
 
-        {/* Pinned stage */}
-        <div className="sticky top-0 h-svh overflow-hidden">
-          {/* Base layer: hero */}
+        {/* Pinned stage: full height even when the address bar is hidden */}
+        <div
+          ref={stageRef}
+          className="sticky top-0 h-lvh overflow-hidden bg-white"
+        >
+          {/* Base layer: hero (laid out in svh, so it never moves) */}
           <div className="absolute inset-0">{children}</div>
 
           {/* Glowing leading edge of the shutter */}
@@ -88,7 +141,7 @@ export default function HeroReveal({
 
             <motion.div
               style={{ opacity: contentOpacity, y: contentY }}
-              className="relative flex h-full items-center justify-center px-6 py-24 sm:px-10 lg:px-14"
+              className="relative flex h-svh items-center justify-center px-6 py-24 sm:px-10 lg:px-14"
             >
               {panel}
             </motion.div>

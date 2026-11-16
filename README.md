@@ -5,7 +5,7 @@
 
 </div>
 
-<h3 align="center">Frontend Developer who likes to design, not AI slop.</h3>
+<h3 align="center">Frontend Developer with an eye for design and a passion for building.</h3>
 
 <p align="center">
   <a href="https://jeya-jothi-portfolio.onrender.com">Portfolio</a> •

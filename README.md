@@ -23,10 +23,10 @@ I enjoy turning ideas into clean, interactive web experiences. I care about how 
 
 I started with electronics engineering and somehow ended up spending most of my time making things work in a browser. No regrets!
 
-- 💻 Working with React and Next.js.
-- 🎨 Interested in UI design, interactions and visual details.
-- 🧩 Enjoy building things from scratch and figuring out how they work.
-- 🌱 Always learning something new.
+- • Working with React and Next.js.
+- • Interested in UI design, interactions and visual details.
+- • Enjoy building things from scratch and figuring out how they work.
+- • Always learning something new.
 
 ### My tech stack
 
@@ -34,23 +34,50 @@ I started with electronics engineering and somehow ended up spending most of my 
   <img src="https://skillicons.dev/icons?i=react,nextjs,ts,js,html,css,tailwind,nodejs,express,git,github,figma&perline=6" />
 </p>
 
-### Things I've built
+## Selected Projects
 
-A few projects I've enjoyed working on:
+A mix of professional work and personal projects I've built.
 
-| Project                                                                          | What it is                                  |
-| -------------------------------------------------------------------------------- | ------------------------------------------- |
-| [Play NFT](https://github.com/Jeya-Jothi/Play-NFT)                               | NFT marketplace UI with smooth interactions |
-| [Healthcare Dashboard](https://github.com/Jeya-Jothi/Healthcare-dashboard-React) | Component-based admin dashboard in React    |
-| [GTG Perfume](https://github.com/Jeya-Jothi/GTG_Perfume_Project)                 | Product website with an interactive gallery |
-| [Pokemon Explorer](https://github.com/Jeya-Jothi/Pokemon-Explorer)               | A small Pokémon exploration project         |
-| [QR Code Generator](https://github.com/Jeya-Jothi/QR-Code-Generator)             | Simple QR code generation tool              |
+### Professional Projects
 
-### GitHub at a glance
+| Project              | Description                             | Link                                                       |
+| -------------------- | --------------------------------------- | ---------------------------------------------------------- |
+| **School Sanchalak** | School management platform landing page | [Visit ↗](https://academiaflow.growifyindia.com)           |
+| **HRM Growify**      | HR management platform landing page     | Professional work                                          |
+| **Growify India**    | Company website and responsive UI       | [Visit ↗](https://growifyindia.com)                        |
+| **V-Fixer**          | Business website and landing page       | [Visit ↗](https://vfixerchemical.com)                      |
+| **GBC**              | Complete website design and development | [Visit ↗](https://growify-business-consultancy.vercel.app) |
+
+### Personal Projects
+
+| Project              | Description                                            |
+| -------------------- | ------------------------------------------------------ |
+| **Bricks Dashboard** | Responsive dashboard built with Next.js and TypeScript |
+| **Play NFT**         | NFT marketplace UI with interactive elements           |
+
+[Explore more on GitHub →](https://github.com/Jeya-Jothi?tab=repositories)
+|
+
+## GitHub at a glance
 
 <p align="center">
-  <img height="165" src="https://github-readme-stats.vercel.app/api?username=Jeya-Jothi&show_icons=true&theme=github_dark&hide_border=true&rank_icon=github" />
-  <img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Jeya-Jothi&layout=compact&theme=github_dark&hide_border=true" />
+  <a href="https://github.com/Jeya-Jothi?tab=repositories">
+    <img src="https://img.shields.io/badge/Repositories-Explore%20my%20work-181717?style=for-the-badge&logo=github" />
+  </a>
+  <a href="https://github.com/Jeya-Jothi?tab=stars">
+    <img src="https://img.shields.io/badge/Stars-My%20favorites-yellow?style=for-the-badge&logo=github" />
+  </a>
+</p>
+
+<p align="center">
+  I enjoy experimenting, building projects, learning new technologies,
+  and improving with every commit.
+</p>
+
+<p align="center">
+  <a href="https://github.com/Jeya-Jothi">
+    View my GitHub profile and contribution activity →
+  </a>
 </p>
 
 <p align="center">
@@ -59,7 +86,7 @@ A few projects I've enjoyed working on:
 
 ### Where I've worked
 
-**Growify India** — Frontend Developer
+**Growify India** - Frontend Developer
 
 Worked on business websites and SaaS products, building responsive interfaces and translating design ideas into functional web experiences.
 

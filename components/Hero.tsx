@@ -78,11 +78,6 @@ function Line({
 const TRACKING = -0.03; // letter-spacing in em
 const TRAILING_PAD = 0.04; // em, stops the last glyph being clipped
 
-/**
- * Measures the text at 100px using the real font, including the empty
- * space (side bearings) before the first glyph and after the last one.
- * Letters are separate inline-blocks, so widths are summed per character.
- */
 function measureInk(text: string, el: HTMLElement) {
   const ctx = document.createElement("canvas").getContext("2d");
   if (!ctx) return null;
@@ -102,11 +97,6 @@ function measureInk(text: string, el: HTMLElement) {
   };
 }
 
-/**
- * Bold giant text. The visible INK (not the text box) is stretched to the
- * exact width of its container, so the first and last letters touch both
- * edges and line up with everything else in the column.
- */
 function FitLine({
   text,
   delay = 0,
@@ -196,8 +186,17 @@ function FitLine({
 }
 
 /** Endless strip at the bottom of the card. */
+
 function Marquee() {
-  const items = Array.from({ length: 6 });
+  const items = [
+    "Frontend Developer",
+    "UI Design Enthusiast",
+    "Creative Problem Solver",
+    "Interactive Web Experiences",
+    "Design to Code",
+    "Always Building",
+  ];
+
   return (
     <div
       aria-hidden="true"
@@ -206,18 +205,18 @@ function Marquee() {
       <motion.div
         className="flex w-max"
         animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 32, ease: "linear", repeat: Infinity }}
+        transition={{
+          duration: 35,
+          ease: "linear",
+          repeat: Infinity,
+        }}
       >
         {[0, 1].map((half) => (
-          <div key={half} className="flex shrink-0 items-center gap-8 pr-8">
-            {items.map((_, i) => (
-              <span key={i} className="flex items-center gap-8">
+          <div key={half} className="flex shrink-0 items-center gap-10 pr-10">
+            {items.map((item, i) => (
+              <span key={i} className="flex items-center gap-10">
                 <span className="eyebrow whitespace-nowrap text-white">
-                  Frontend Developer
-                </span>
-                <Sparkle className="size-3 text-white" />
-                <span className="eyebrow whitespace-nowrap text-white">
-                  Portfolio
+                  {item}
                 </span>
                 <Sparkle className="size-3 text-white" />
               </span>
@@ -286,10 +285,6 @@ export default function Hero() {
               </p>
             </motion.div>
           </motion.div>
-
-          {/* Marquee sits on the fixed svh line (no JS, no resize jumps).
-              The dark area below it only becomes visible when the mobile
-              address bar hides, and the browser reveals it smoothly. */}
           <motion.div
             style={{ scaleX: squeeze, originX: 1 }}
             className="absolute inset-x-0 bottom-0 top-[100svh] bg-ink"

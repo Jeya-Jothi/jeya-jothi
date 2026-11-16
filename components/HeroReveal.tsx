@@ -25,22 +25,6 @@ export function useRevealProgress() {
   return wipe ?? fallback;
 }
 
-/**
- * Mobile browsers show/hide the address bar while scrolling, which changes
- * window.innerHeight (and 100vh / 100dvh) on the fly. Anything that depends
- * on those makes the animation jump.
- *
- * So this component only uses the two stable viewport units:
- *   - svh: viewport with the address bar SHOWN  (never changes on scroll)
- *   - lvh: viewport with the address bar HIDDEN (never changes on scroll)
- *
- * Layout:
- *   stage   = 100lvh  (always fills the screen, bar shown or hidden)
- *   wrapper = stage + 200svh  → the pinned scroll distance is exactly 200svh
- *
- * Progress is calculated by hand from scrollY and those fixed sizes, instead
- * of Motion's target offsets (which read window.innerHeight).
- */
 export default function HeroReveal({
   children,
   panel,
@@ -67,8 +51,6 @@ export default function HeroReveal({
     };
 
     measure();
-    // Fires only on real size changes (rotation, desktop resize),
-    // not when the mobile address bar slides in and out.
     const observer = new ResizeObserver(measure);
     observer.observe(wrapper);
     observer.observe(stage);
@@ -89,8 +71,7 @@ export default function HeroReveal({
     mass: 0.25,
   });
 
-  // 0 → 1 over the first half of the scroll distance
-  const wipe = useTransform(progress, [0, 0.5], [0, 1]);
+  const wipe = useTransform(progress, [0, 0.6], [0, 1]);
 
   const clipPath = useTransform(
     wipe,
@@ -100,12 +81,12 @@ export default function HeroReveal({
   const edgeOpacity = useTransform(wipe, [0, 0.02, 0.98, 1], [0, 1, 1, 0]);
 
   // Panel content appears after the panel is (almost) full width
-  const contentOpacity = useTransform(progress, [0.42, 0.62], [0, 1]);
-  const contentY = useTransform(progress, [0.42, 0.62], [48, 0]);
+  const contentOpacity = useTransform(progress, [0.5, 0.85], [0, 1]);
+  const contentY = useTransform(progress, [0.5, 0.85], [48, 0]);
 
   return (
     <RevealContext.Provider value={wipe}>
-      <div ref={wrapperRef} className="relative h-[calc(100lvh+200svh)]">
+      <div ref={wrapperRef} className="relative h-[calc(100lvh+150svh)]">
         {/* Anchor for the "About" nav link */}
         <span
           id="about"

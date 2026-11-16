@@ -80,12 +80,12 @@ export default function Header() {
                 onMouseEnter={() => setHovered(link.label)}
                 onFocus={() => setHovered(link.label)}
                 onBlur={() => setHovered(null)}
-                className="relative isolate block rounded-full px-4 py-2 text-sm text-white/70 transition-colors hover:text-white focus-visible:outline-white"
+                className="relative isolate block rounded-full px-4 py-2 text-sm text-white/70 transition-colors hover:text-sceptre-950 focus-visible:outline-white"
               >
                 {hovered === link.label && (
                   <motion.span
                     layoutId="nav-pill"
-                    className="absolute inset-0 -z-10 rounded-full bg-white/10"
+                    className="absolute inset-0 -z-10 rounded-full bg-white"
                     transition={{ type: "spring", stiffness: 420, damping: 34 }}
                   />
                 )}

@@ -115,11 +115,6 @@ export default function HeroReveal({
             style={{ clipPath }}
             className="absolute inset-0 z-10 bg-ink text-white"
           >
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgb(255_255_255/0.09)_1.2px,transparent_1.2px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_at_50%_50%,black,transparent_75%)]"
-            />
-
             <motion.div
               style={{ opacity: contentOpacity, y: contentY }}
               className="relative flex h-svh items-center justify-center px-6 py-24 sm:px-10 lg:px-14"

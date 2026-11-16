@@ -234,9 +234,6 @@ export default function Hero() {
   const wipe = useRevealProgress();
   const reduce = useReducedMotion();
 
-  // The hero is squeezed into whatever width the shutter leaves free.
-  // Anchored to the right edge, so its left side always touches the shutter.
-  // Name, PORTFOLIO and role all squeeze together, staying on their own rows.
   const squeeze = useTransform(wipe, [0, 1], [1, reduce ? 1 : 0.02]);
   return (
     <MotionConfig reducedMotion="user">

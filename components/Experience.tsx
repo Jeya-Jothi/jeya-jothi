@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type RefObject,
+} from "react";
 import {
   animate,
   motion,
@@ -14,6 +20,36 @@ import {
 import { EXPERIENCE, type ExperienceItem, type Role } from "@/lib/experience";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+const WATERMARK_WRAP =
+  "pointer-events-none absolute inset-y-0 left-1/2 flex w-screen -translate-x-1/2 select-none items-center";
+const WATERMARK_WORD =
+  "shrink-0 whitespace-nowrap text-[28vw] font-black leading-none tracking-[-0.05em] text-white/[0.035]";
+const CARD =
+  "h-full rounded-3xl border border-white/10 bg-white/5 p-6 transition-colors duration-300 hover:border-white/25 hover:bg-white/[0.07] sm:p-8";
+const DOT =
+  "absolute left-0 top-8 size-5 rounded-full border-2 border-ink ring-1 ring-white/20";
+
+/* ---------- Desktop detection ---------- */
+
+const DESKTOP_QUERY = "(min-width: 1024px)";
+
+function subscribeDesktop(cb: () => void) {
+  const mq = window.matchMedia(DESKTOP_QUERY);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+}
+
+/** false on the server and first paint, so mobile never runs desktop scroll effects. */
+function useIsDesktop() {
+  return useSyncExternalStore(
+    subscribeDesktop,
+    () => window.matchMedia(DESKTOP_QUERY).matches,
+    () => false,
+  );
+}
+
+const pad = (n: number) => String(n).padStart(2, "0");
 
 /* ---------- Small building blocks ---------- */
 
@@ -89,8 +125,56 @@ function CountUp({ to }: { to: number }) {
   return <span ref={ref}>{reduce ? to : 0}</span>;
 }
 
-/** One step of a timeline. Its entrance is tied to scroll position (scrubbed). */
-function TimelineItem({
+/** Background word that drifts sideways with scroll (desktop only). */
+function DriftWord({
+  text,
+  targetRef,
+}: {
+  text: string;
+  targetRef: RefObject<HTMLDivElement | null>;
+}) {
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start end", "end start"],
+  });
+  const x = useTransform(scrollYProgress, [0, 1], ["12%", "-32%"]);
+
+  return (
+    <motion.div
+      style={{ x, willChange: "transform" }}
+      className={WATERMARK_WORD}
+    >
+      {text}
+    </motion.div>
+  );
+}
+
+function CardBody({ item, index }: { item: ExperienceItem; index: number }) {
+  return (
+    <>
+      <span className="eyebrow text-sceptre-300">{pad(index + 1)}</span>
+      <h4 className="mt-4 text-balance text-xl text-white sm:text-2xl">
+        {item.title}
+      </h4>
+      <p className="mt-3 text-pretty text-white/70 sm:text-lg">{item.body}</p>
+      <ul className="mt-5 flex flex-wrap gap-2">
+        {item.tags.map((tag) => (
+          <li
+            key={tag}
+            className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-sceptre-200 sm:text-sm"
+          >
+            {tag}
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
+/* ---------- Desktop timeline ---------- */
+
+/** Scroll-scrubbed step. Mounted on desktop only. */
+function ScrubbedItem({
   item,
   index,
   reduce,
@@ -119,8 +203,7 @@ function TimelineItem({
   );
 
   return (
-    <li ref={ref} className="relative pl-10 sm:pl-14">
-      {/* Dot on the line: lights up as the step arrives */}
+    <li ref={ref} className="relative pl-14">
       <motion.span
         aria-hidden="true"
         style={
@@ -128,63 +211,178 @@ function TimelineItem({
             ? { backgroundColor: "rgb(207,95,110)" }
             : { backgroundColor: dotColor, boxShadow: dotGlow }
         }
-        className="absolute left-0 top-8 size-5 rounded-full border-2 border-ink ring-1 ring-white/20"
+        className={DOT}
       />
-
       <motion.div
         style={reduce ? undefined : { opacity, y, scale }}
-        className="rounded-3xl border border-white/10 bg-white/5 p-6 transition-colors duration-300 hover:border-white/25 hover:bg-white/[0.07] sm:p-8"
+        className={CARD}
       >
-        <span className="eyebrow text-sceptre-300">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-        <h4 className="mt-4 text-balance text-xl text-white sm:text-2xl">
-          {item.title}
-        </h4>
-        <p className="mt-3 text-pretty text-white/70 sm:text-lg">{item.body}</p>
-        <ul className="mt-5 flex flex-wrap gap-2">
-          {item.tags.map((tag) => (
-            <li
-              key={tag}
-              className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-sceptre-200 sm:text-sm"
-            >
-              {tag}
-            </li>
-          ))}
-        </ul>
+        <CardBody item={item} index={index} />
       </motion.div>
     </li>
   );
 }
 
-/** One job: sticky role card on the left, scroll-driven timeline on the right. */
-function RoleBlock({
-  role,
-  reduce,
-  first,
-}: {
-  role: Role;
-  reduce: boolean;
-  first: boolean;
-}) {
-  const listRef = useRef<HTMLOListElement>(null);
-  const blockRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: blockProgress } = useScroll({
-    target: blockRef,
-    offset: ["start end", "end start"],
-  });
-  const wordX = useTransform(blockProgress, [0, 1], ["12%", "-32%"]);
+/** Same layout as ScrubbedItem, no motion. Used for server render / first paint. */
+function StaticItem({ item, index }: { item: ExperienceItem; index: number }) {
+  return (
+    <li className="relative pl-14">
+      <span aria-hidden="true" className={`${DOT} bg-white/[0.18]`} />
+      <div className={CARD}>
+        <CardBody item={item} index={index} />
+      </div>
+    </li>
+  );
+}
 
-  // The timeline line fills as you scroll through the list
-  const { scrollYProgress: listProgress } = useScroll({
+/** Timeline progress fill. Mounted on desktop only. */
+function TrackFill({
+  listRef,
+  reduce,
+}: {
+  listRef: RefObject<HTMLOListElement | null>;
+  reduce: boolean;
+}) {
+  const { scrollYProgress } = useScroll({
     target: listRef,
     offset: ["start 60%", "end 60%"],
   });
-  const lineScale = useSpring(listProgress, {
+  const lineScale = useSpring(scrollYProgress, {
     stiffness: 120,
     damping: 28,
     mass: 0.3,
   });
+
+  return (
+    <motion.span
+      aria-hidden="true"
+      style={{ scaleY: reduce ? 1 : lineScale }}
+      className="absolute bottom-0 left-[9px] top-0 w-0.5 origin-top rounded-full bg-sceptre-400 shadow-[0_0_16px_2px_rgb(207_95_110/0.5)]"
+    />
+  );
+}
+
+function DesktopTimeline({
+  items,
+  reduce,
+  live,
+}: {
+  items: readonly ExperienceItem[];
+  reduce: boolean;
+  live: boolean;
+}) {
+  const listRef = useRef<HTMLOListElement>(null);
+
+  return (
+    <ol ref={listRef} className="relative flex flex-col gap-10">
+      <span
+        aria-hidden="true"
+        className="absolute bottom-0 left-[9px] top-0 w-0.5 rounded-full bg-white/15"
+      />
+      {live && <TrackFill listRef={listRef} reduce={reduce} />}
+
+      {items.map((item, i) =>
+        live ? (
+          <ScrubbedItem key={item.id} item={item} index={i} reduce={reduce} />
+        ) : (
+          <StaticItem key={item.id} item={item} index={i} />
+        ),
+      )}
+    </ol>
+  );
+}
+
+/* ---------- Mobile carousel ---------- */
+
+function MobileCarousel({ items }: { items: readonly ExperienceItem[] }) {
+  const ref = useRef<HTMLOListElement>(null);
+  const frame = useRef(0);
+  const [active, setActive] = useState(0);
+
+  useEffect(() => () => cancelAnimationFrame(frame.current), []);
+
+  const onScroll = () => {
+    if (frame.current) return;
+    frame.current = requestAnimationFrame(() => {
+      frame.current = 0;
+      const el = ref.current;
+      const a = el?.children[0] as HTMLElement | undefined;
+      const b = el?.children[1] as HTMLElement | undefined;
+      if (!el || !a) return;
+      const step = b ? b.offsetLeft - a.offsetLeft : a.offsetWidth;
+      const next = Math.min(
+        items.length - 1,
+        Math.max(0, Math.round(el.scrollLeft / step)),
+      );
+      setActive((prev) => (prev === next ? prev : next));
+    });
+  };
+
+  const goTo = (i: number) => {
+    (ref.current?.children[i] as HTMLElement | undefined)?.scrollIntoView({
+      behavior: "smooth",
+      inline: "start",
+      block: "nearest",
+    });
+  };
+
+  return (
+    <div className="[--gutter:1rem] lg:hidden">
+      <ol
+        ref={ref}
+        onScroll={onScroll}
+        className="-mx-[var(--gutter)] flex snap-x snap-mandatory scroll-pl-[var(--gutter)] gap-4 overflow-x-auto overscroll-x-contain px-[var(--gutter)] pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {items.map((item, i) => (
+          <li key={item.id} className="w-[85%] shrink-0 snap-start sm:w-[60%]">
+            <div className={CARD}>
+              <CardBody item={item} index={i} />
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <div className="mt-4 flex items-center justify-between">
+        <span className="eyebrow text-sceptre-300">
+          {pad(active + 1)} / {pad(items.length)}
+        </span>
+        <div className="flex items-center">
+          {items.map((item, i) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => goTo(i)}
+              aria-label={`Show card ${i + 1} of ${items.length}`}
+              aria-current={i === active}
+              className="flex h-8 items-center px-1"
+            >
+              <span
+                className={`block h-1.5 rounded-full transition-all duration-300 ${
+                  i === active ? "w-6 bg-sceptre-400" : "w-1.5 bg-white/25"
+                }`}
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- One job ---------- */
+
+function RoleBlock({
+  role,
+  reduce,
+  desktop,
+  first,
+}: {
+  role: Role;
+  reduce: boolean;
+  desktop: boolean;
+  first: boolean;
+}) {
+  const blockRef = useRef<HTMLDivElement>(null);
 
   return (
     <div
@@ -193,20 +391,16 @@ function RoleBlock({
         first ? "" : "mt-16 border-t border-white/10 pt-16 lg:mt-24 lg:pt-24"
       }`}
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-1/2 flex w-screen -translate-x-1/2 select-none items-center"
-      >
-        <motion.div
-          style={reduce ? undefined : { x: wordX }}
-          className="shrink-0 whitespace-nowrap text-[28vw] font-black leading-none tracking-[-0.05em] text-white/[0.035]"
-        >
-          {role.watermark}
-        </motion.div>
+      <div aria-hidden="true" className={WATERMARK_WRAP}>
+        {desktop && !reduce ? (
+          <DriftWord text={role.watermark} targetRef={blockRef} />
+        ) : (
+          <div className={WATERMARK_WORD}>{role.watermark}</div>
+        )}
       </div>
 
-      {/* Left: role card, stays in view while the timeline scrolls */}
-      <aside className="lg:sticky lg:top-28 lg:self-start">
+      {/* Left: role card, stays in view while the timeline scrolls (desktop) */}
+      <aside className="relative lg:sticky lg:top-28 lg:self-start">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -268,29 +462,18 @@ function RoleBlock({
               className="group mt-8 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm text-ink transition-colors hover:bg-sceptre-100"
             >
               {role.cta.label}
-              <ArrowDown className="size-4 transition-transform duration-300 group-hover:translate-y-0.5" />
             </a>
           )}
         </motion.div>
       </aside>
 
-      {/* Right: scroll-driven timeline */}
-      <ol ref={listRef} className="relative flex flex-col gap-8 sm:gap-10">
-        {/* Track + progress fill */}
-        <span
-          aria-hidden="true"
-          className="absolute bottom-0 left-[9px] top-0 w-0.5 rounded-full bg-white/15"
-        />
-        <motion.span
-          aria-hidden="true"
-          style={{ scaleY: reduce ? 1 : lineScale }}
-          className="absolute bottom-0 left-[9px] top-0 w-0.5 origin-top rounded-full bg-sceptre-400 shadow-[0_0_16px_2px_rgb(207_95_110/0.5)]"
-        />
-
-        {role.items.map((item, i) => (
-          <TimelineItem key={item.id} item={item} index={i} reduce={reduce} />
-        ))}
-      </ol>
+      {/* Right: swipe cards on mobile, scroll-driven timeline on desktop */}
+      <div className="relative min-w-0">
+        {!desktop && <MobileCarousel items={role.items} />}
+        <div className="hidden lg:block">
+          <DesktopTimeline items={role.items} reduce={reduce} live={desktop} />
+        </div>
+      </div>
     </div>
   );
 }
@@ -299,6 +482,7 @@ function RoleBlock({
 
 export default function Experience() {
   const reduce = useReducedMotion() ?? false;
+  const desktop = useIsDesktop();
 
   return (
     <MotionConfig reducedMotion="user">
@@ -308,12 +492,6 @@ export default function Experience() {
         aria-labelledby="experience-title"
         className="relative scroll-mt-20 overflow-clip bg-ink py-20 text-white sm:py-28 lg:py-36"
       >
-        {/* Decorative background */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgb(255_255_255/0.07)_1.2px,transparent_1.2px)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_at_50%_40%,black,transparent_75%)]"
-        />
-
         <div className="container-page relative">
           <header className="mb-12 flex flex-col gap-6 lg:mb-16 lg:flex-row lg:items-end lg:justify-between">
             <div>
@@ -342,6 +520,7 @@ export default function Experience() {
               key={role.id}
               role={role}
               reduce={reduce}
+              desktop={desktop}
               first={i === 0}
             />
           ))}

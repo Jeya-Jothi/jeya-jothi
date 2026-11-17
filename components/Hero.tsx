@@ -176,7 +176,7 @@ function FitLine({
                 },
               }}
             >
-              {char}
+              {char === " " ? "\u00A0" : char}
             </motion.span>
           ))}
         </motion.span>
@@ -297,22 +297,22 @@ export default function Hero() {
             <h1 className="sr-only">
               Jeya Jothi, Frontend Developer Portfolio
             </h1>
-            {/* 1. Name, small */}
+            {/* 1. Portfolio, small */}
             <div aria-hidden="true" className="ml-2">
               <p className="text-[clamp(1.1rem,2.4vw,2.25rem)] leading-tight text-ink">
-                <Line text="Jeya Jothi" delay={0.2} />
+                <Line text="Frontend Developer" delay={0.2} />
               </p>
             </div>
-            {/* 2. PORTFOLIO, giant, bold, full width */}
+            {/* 2. JEYA JOTHI, giant, bold, full width */}
             <motion.div aria-hidden="true">
               {/* Desktop and tablet: one line */}
               <div className="hidden md:block">
-                <FitLine text="PORTFOLIO" delay={0.35} fallback="16vw" />
+                <FitLine text="JEYA JOTHI" delay={0.35} fallback="16vw" />
               </div>
               {/* Mobile: stacked so it stays huge */}
               <div className="md:hidden">
-                <FitLine text="PORT" delay={0.35} fallback="28vw" />
-                <FitLine text="FOLIO" delay={0.6} fallback="24vw" />
+                <FitLine text="JEYA" delay={0.35} fallback="28vw" />
+                <FitLine text="JOTHI" delay={0.6} fallback="24vw" />
               </div>
             </motion.div>
             {/* 3. Role, right end */}
@@ -321,7 +321,7 @@ export default function Hero() {
               className="mt-4 flex items-center justify-end gap-4 sm:mt-6 sm:gap-6"
             >
               <p className="text-[clamp(1.1rem,2.4vw,2.25rem)] leading-tight text-ink">
-                <Line text="Frontend Developer" delay={1.05} />
+                <Line text="Portfolio" delay={1.05} />
               </p>
             </motion.div>
           </motion.div>

@@ -11,3 +11,4 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 }
+// move sitemap.ts to app folder to fix the error "The route /sitemap.xml is not defined in your app router"

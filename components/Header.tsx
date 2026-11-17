@@ -206,7 +206,7 @@ export default function Header() {
               className="size-10 rounded-full transition-transform duration-500 ease-out group-hover:-rotate-12"
             />
             <span className="flex flex-col leading-tight">
-              <span className="text-sm">Jeya Jothi</span>
+              <span className="text-sm font-semibold">Jeya Jothi</span>
               <span
                 className={`hidden text-xs transition-colors duration-500 sm:block ${t.role}`}
               >
@@ -227,7 +227,7 @@ export default function Header() {
                   onMouseEnter={() => setHovered(link.label)}
                   onFocus={() => setHovered(link.label)}
                   onBlur={() => setHovered(null)}
-                  className={`relative isolate block rounded-full px-4 py-2 text-sm transition-colors ${t.link} ${t.focus}`}
+                  className={`relative isolate block rounded-full px-4 py-2 text-sm font-semibold transition-colors ${t.link} ${t.focus}`}
                 >
                   {hovered === link.label && (
                     <motion.span

@@ -10,7 +10,7 @@ export const SITE = {
   description:
     "Jeya Jothi S is a frontend developer from Tamil Nadu, India, building fast, responsive and accessible web interfaces with React, Next.js, TypeScript and Tailwind CSS.",
   // Put your PDF in /public with exactly this file name
-  resume: "/Jeya_Jothi_Resume.pdf",
+  resume: "/Jeya Jothi - Resume.pdf",
 } as const;
 
 export const NAV_LINKS = [

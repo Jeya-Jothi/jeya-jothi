@@ -206,9 +206,8 @@ function Preview({
 
   return (
     <div
-      className={`relative flex-1 overflow-hidden rounded-2xl ${t.preview} ${
-        featured ? "min-h-56 sm:min-h-80" : "min-h-44"
-      }`}
+      // Fixed 16:9 frame (typical screenshot shape), so the whole image is shown
+      className={`relative aspect-video w-full flex-none overflow-hidden rounded-2xl ${t.preview}`}
     >
       <div
         aria-hidden="true"
@@ -235,7 +234,7 @@ function Preview({
               ? "(min-width: 1024px) 800px, 100vw"
               : "(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
           }
-          className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          className="object-contain transition-transform duration-700 ease-out group-hover:scale-[1.03]"
           onError={() => setFailed(true)}
         />
       )}
@@ -296,7 +295,7 @@ function ProjectCard({
         <div className="flex h-full flex-col gap-5">
           <Preview project={project} tone={tone} featured={featured} />
 
-          <div className="px-1 sm:px-2">
+          <div className="flex flex-1 flex-col px-1 sm:px-2">
             <div className="flex items-center justify-between gap-3">
               <span className={`eyebrow ${t.eyebrow}`}>{project.context}</span>
               <StatusBadge status={project.status} tone={tone} />
@@ -325,7 +324,7 @@ function ProjectCard({
             </ul>
 
             {(project.live || project.repo) && (
-              <div className="mt-5 flex flex-wrap items-center gap-3">
+              <div className="mt-auto flex flex-wrap items-center gap-3 pt-5">
                 {project.live && (
                   // Stretched link: the whole card opens the live site
                   <a

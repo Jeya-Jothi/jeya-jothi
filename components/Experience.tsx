@@ -490,7 +490,7 @@ export default function Experience() {
       <section
         id="experience"
         aria-labelledby="experience-title"
-        className="relative scroll-mt-20 overflow-clip bg-ink py-20 text-white sm:py-28 lg:py-36"
+        className="relative scroll-mt-10 overflow-clip bg-ink py-20 text-white sm:py-28 "
       >
         <div className="container-page relative">
           <header className="mb-12 flex flex-col gap-6 lg:mb-16 lg:flex-row lg:items-end lg:justify-between">

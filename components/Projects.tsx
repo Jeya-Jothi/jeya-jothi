@@ -425,7 +425,7 @@ export default function Projects() {
       <section
         id="projects"
         aria-labelledby="projects-title"
-        className="scroll-mt-20 bg-white py-20 sm:py-28 lg:py-36"
+        className="scroll-mt-10 bg-white py-20"
       >
         <div className="container-page">
           <header className="mb-10 flex flex-col gap-6 lg:mb-14 lg:flex-row lg:items-end lg:justify-between">

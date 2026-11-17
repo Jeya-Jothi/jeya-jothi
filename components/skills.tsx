@@ -269,7 +269,7 @@ export default function Skills() {
       <section
         id="skills"
         aria-labelledby="skills-title"
-        className="scroll-mt-20 bg-white py-20 sm:py-28"
+        className="scroll-mt-10 bg-white py-20"
       >
         <div className="container-page">
           <header className="mb-12 flex flex-col gap-6 lg:mb-16 lg:flex-row lg:items-end lg:justify-between">

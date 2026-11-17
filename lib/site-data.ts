@@ -1,7 +1,7 @@
 export const GITHUB_URL = "https://github.com/Jeya-Jothi";
 
 export const SITE = {
-  name: "Jeya Jothi S",
+  name: "Jeya Jothi",
   role: "Frontend Developer",
   email: "jeyajothi108@gmail.com",
   location: "Tenkasi, Tamil Nadu",

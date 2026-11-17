@@ -19,8 +19,8 @@ export default function Home() {
         </HeroReveal>
 
         <Projects />
-        <Skills />
         <Experience />
+        <Skills />
         <Contact />
 
         {/* Next section goes here: Experience */}

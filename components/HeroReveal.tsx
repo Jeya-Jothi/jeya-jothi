@@ -91,7 +91,7 @@ export default function HeroReveal({
         <span
           id="about"
           aria-hidden="true"
-          className="absolute left-0 top-[40%] h-px w-px"
+          className="absolute left-0 top-[135svh] h-px w-px"
         />
 
         {/* Pinned stage: full height even when the address bar is hidden */}

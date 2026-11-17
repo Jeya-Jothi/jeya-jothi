@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import HeroReveal from "@/components/HeroReveal";
 import About from "@/components/About";
+import Skills from "@/components/skills";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -14,7 +15,9 @@ export default function Home() {
           <Hero />
         </HeroReveal>
 
-        {/* Next sections go here: Projects, Experience, Skills */}
+        <Skills />
+
+        {/* Next sections go here: Projects, Experience */}
       </main>
       <Footer />
     </>

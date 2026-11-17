@@ -1,6 +1,3 @@
-/* Single source of truth for links and contact details.
-   Header, Footer, SEO and any future section import from here. */
-
 export const SITE = {
   name: "Jeya Jothi S",
   role: "Frontend Developer",
@@ -29,4 +26,57 @@ export const SOCIAL_LINKS = [
     href: "https://www.linkedin.com/in/jeya-jothi-841277211",
   },
   { label: "Email", href: `mailto:${SITE.email}` },
+] as const;
+
+/* Skills section content (taken from the resume) */
+export const SKILL_GROUPS = [
+  {
+    id: "frontend",
+    title: "Frontend Development",
+    blurb: "Interfaces built to be fast, responsive and accessible.",
+    skills: [
+      "Next.js",
+      "React.js",
+      "TypeScript",
+      "JavaScript (ES6+)",
+      "HTML5",
+      "CSS3",
+      "Tailwind CSS",
+      "Bootstrap",
+    ],
+  },
+  {
+    id: "design",
+    title: "UI/UX Design",
+    blurb: "From Figma to polished, consistent layouts.",
+    skills: [
+      "Figma",
+      "UI Design",
+      "Responsive Design",
+      "Layout Design",
+      "Typography",
+      "Component Design",
+      "Visual Hierarchy",
+      "Design-to-Code",
+    ],
+  },
+  {
+    id: "ai",
+    title: "AI-Assisted Tools",
+    blurb: "Workflows that speed up design and development.",
+    skills: ["Stitch AI", "ChatGPT", "Claude", "GitHub Copilot"],
+  },
+  {
+    id: "tools",
+    title: "Development Tools",
+    blurb: "Everyday tooling for shipping and testing.",
+    skills: ["Git", "GitHub", "VS Code", "Postman", "REST API Integration"],
+  },
+  {
+    id: "backend",
+    title: "Backend",
+    blurb: "Server-side basics to work with real APIs.",
+    note: "Working knowledge",
+    skills: ["Node.js", "Express.js"],
+  },
 ] as const;

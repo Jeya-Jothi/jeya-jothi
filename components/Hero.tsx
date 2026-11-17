@@ -187,43 +187,86 @@ function FitLine({
 
 /** Endless strip at the bottom of the card. */
 
+const MARQUEE_ITEMS = [
+  "Frontend Developer",
+  "UI Design Enthusiast",
+  "Creative Problem Solver",
+  "Interactive Web Experiences",
+  "Design to Code",
+  "Always Building",
+];
+const REPEAT = 3; // list repeats per copy, so one copy is wider than any screen (up to 4K)
+const SPEED = 50; // pixels per second
+
 function Marquee() {
-  const items = [
-    "Frontend Developer",
-    "UI Design Enthusiast",
-    "Creative Problem Solver",
-    "Interactive Web Experiences",
-    "Design to Code",
-    "Always Building",
-  ];
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    // Visitors who asked for reduced motion get a still strip
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let anim: Animation | null = null;
+
+    const sync = () => {
+      const copyWidth = track.scrollWidth / 2; // the track holds two identical copies
+      if (!copyWidth) return;
+      const duration = (copyWidth / SPEED) * 1000;
+
+      if (!anim) {
+        anim = track.animate(
+          [
+            { transform: "translate3d(0,0,0)" },
+            { transform: "translate3d(-50%,0,0)" },
+          ],
+          { duration, iterations: Infinity, easing: "linear" },
+        );
+        return;
+      }
+
+      // Width changed (font loaded, window resized): same speed, same position
+      const effect = anim.effect;
+      if (!effect) return;
+      const old = Number(effect.getTiming().duration) || duration;
+      if (Math.abs(old - duration) < 1) return;
+      const ratio = (Number(anim.currentTime) % old) / old;
+      effect.updateTiming({ duration });
+      anim.currentTime = ratio * duration;
+    };
+
+    sync();
+    const observer = new ResizeObserver(sync);
+    observer.observe(track);
+    document.fonts?.ready.then(sync);
+
+    return () => {
+      observer.disconnect();
+      anim?.cancel();
+    };
+  }, []);
 
   return (
     <div
       aria-hidden="true"
       className="relative overflow-hidden border-t border-line bg-ink py-4"
     >
-      <motion.div
-        className="flex w-max"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{
-          duration: 35,
-          ease: "linear",
-          repeat: Infinity,
-        }}
-      >
-        {[0, 1].map((half) => (
-          <div key={half} className="flex shrink-0 items-center gap-10 pr-10">
-            {items.map((item, i) => (
-              <span key={i} className="flex items-center gap-10">
-                <span className="eyebrow whitespace-nowrap text-white">
-                  {item}
+      <div ref={trackRef} className="flex w-max will-change-transform">
+        {[0, 1].map((copy) => (
+          <div key={copy} className="flex shrink-0 items-center gap-10 pr-10">
+            {Array.from({ length: REPEAT }).flatMap((_, r) =>
+              MARQUEE_ITEMS.map((item) => (
+                <span key={`${r}-${item}`} className="flex items-center gap-10">
+                  <span className="eyebrow whitespace-nowrap text-white">
+                    {item}
+                  </span>
+                  <Sparkle className="size-3 shrink-0 text-white" />
                 </span>
-                <Sparkle className="size-3 text-white" />
-              </span>
-            ))}
+              )),
+            )}
           </div>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }
